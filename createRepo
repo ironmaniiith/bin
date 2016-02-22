@@ -1,0 +1,7 @@
+echo 'Enter the repo name'
+read repo
+echo 'Enter the username'
+read username
+echo 'Enter the access token'
+read token
+curl -i -H "Authorization: token $token" -d "{ \"name\": \"$repo\",\"auto_init\": true, \"private\": false }" https://api.github.com/user/repos

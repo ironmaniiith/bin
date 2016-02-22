@@ -1,0 +1,12 @@
+alias cl='printf "\033c"'
+alias ccl='cl'
+alias lcd='cl; cd'
+alias c.='cd ..'
+alias c='cd '
+alias .='cd ..'
+alias s='subl'
+alias mkcd='function _mkcd() { mkdir -p "$1"; cd "$1";}; _mkcd'
+alias gis='git status'
+alias gic='git checkout'
+alias gib='git branch'
+randomStuff

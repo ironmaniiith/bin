@@ -1,0 +1,7 @@
+*.temp
+*.secret
+*.key
+*.token
+*.dev
+*.alpha
+*.beta

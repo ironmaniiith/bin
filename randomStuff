@@ -1,0 +1,8 @@
+#!/bin/bash
+COMMANDS=(asciiquarium weather sl "cowsay `fortune`" "cowthink `fortune`" ironmanToilet)
+TOTAL=0
+while [[ ${COMMANDS[$TOTAL]} != "" ]]; do
+	TOTAL=$(($TOTAL+1))
+done
+a=$(($RANDOM%$TOTAL));
+${COMMANDS[$a]}

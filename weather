@@ -1,0 +1,4 @@
+CITIES=(Bombay Indore Hyderabad Delhi Chennai Kolkata Bangalore California Newyork Chicago SanFrancisco Paris Fiji);
+TOTAL_CITIES=`echo ${CITIES[*]} | wc -w`;
+a=$(($RANDOM%$TOTAL_CITIES));
+curl -4 "http://wttr.in/${CITIES[$a]}" 2>/dev/null;

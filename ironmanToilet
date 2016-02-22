@@ -1,0 +1,6 @@
+#!/bin/bash
+FONTS=(wideterm smbraille pagga letter future ascii12)
+FILTER=(gay metal)
+font=`echo ${FONTS[*]} | sed "s/ /\n/g" | shuf | head -1`
+filter=`echo ${FILTER[*]} | sed "s/ /\n/g" | shuf | head -1`
+toilet -f "$font" -F border --"$filter" ironman

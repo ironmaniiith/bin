@@ -1,0 +1,10 @@
+echo 'Enter the repo name'
+read repo
+echo 'Enter the username'
+read username
+echo 'Enter the access token'
+read token
+echo "The repo with the name "$repo" is going to be deleted, make sure that you know what you are doing"
+read temp
+echo 'Tata bye bye '
+curl -i -X DELETE -H "Authorization: token $token" https://api.github.com/repos/$username/$repo
