@@ -11,4 +11,5 @@ alias gic='git checkout'
 alias gib='git branch'
 alias ipy='ipython'
 alias py='python'
+alias install='sudo apt-get install '
 randomStuff
