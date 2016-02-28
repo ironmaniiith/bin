@@ -9,4 +9,6 @@ alias mkcd='function _mkcd() { mkdir -p "$1"; cd "$1";}; _mkcd'
 alias gis='git status'
 alias gic='git checkout'
 alias gib='git branch'
+alias ipy='ipython'
+alias py='python'
 randomStuff
