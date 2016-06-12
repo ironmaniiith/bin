@@ -11,8 +11,55 @@ alias gic='git checkout'
 alias gib='git branch'
 alias gc='git clone'
 alias gp='git push'
+alias glo='git log --oneline'
 alias ipy='ipython'
 alias py='python'
 alias install='sudo apt-get install '
 alias update='sudo apt-get update'
+alias pm='python manage.py'
+alias run='python manage.py runserver'
+alias migandrun='pm makemigrations; pm migrate; run'
+function dolly-s3_size(){
+	aws s3api list-objects --bucket dolly-s3-videos --output json --query "[sum(Contents[].Size), length(Contents[])]" | awk 'NR!=2 {print $0;next} NR==2 {print $0/1024/1024/1024" GB"}'
+}
+shopt -s extglob
+CRITICALLY_LOW_BATTERY=`seq 0 3 | xargs | sed "s/ /|/g"`
+LOW_BATTERY=`seq 4 35 | xargs | sed "s/ /|/g"`
+MEDIUM_BATTERY=`seq 36 65 | xargs | sed "s/ /|/g"`
+HIGH_BATTERY=`seq 66 100 | xargs | sed "s/ /|/g"`
+function battery_remaining(){
+	echo -en "\e[38;5;237m[\e[38;5;223mBattery: "
+	status=`cat /sys/class/power_supply/BAT1/status`
+	R=`cat /sys/class/power_supply/BAT1/capacity`
+
+	if [[ "$status" == "Charging" ]]; then
+		echo -ne "\e[38;5;46mCharging ... "
+	fi
+
+	case $R in
+		+($HIGH_BATTERY) )
+			# 66 to 100 is high, green
+			echo -ne "\e[38;5;46m"
+		;;
+
+		+($MEDIUM_BATTERY) )
+			# 40 to 69 is medium, cyan
+			echo -ne "\e[38;5;50m"
+		;;
+
+
+		+($LOW_BATTERY) )
+			# 0 to 35 is battery low, red
+			echo -ne "\e[38;5;88m"
+		;;
+
+		+($CRITICALLY_LOW_BATTERY) )
+			# 0 to 3 is battery critically low, dark red
+			echo -ne "\e[38;5;9m"
+		;;
+	esac
+	echo -en "$R%\e[38;5;237m]"
+}
 randomStuff
+PROMPT_COMMAND='history -a;echo -en "\033[m\033[38;5;2m"$(( `sed -n "s/MemFree:[\t ]\+\([0-9]\+\) kB/\1/p" /proc/meminfo`/1024))"\033[38;5;22m/"$((`sed -n "s/MemTotal:[\t ]\+\([0-9]\+\) kB/\1/Ip" /proc/meminfo`/1024 ))MB" `battery_remaining`  \033[m\033[38;5;55m$(< /proc/loadavg)\033[m"'
+PS1='\[\e[m\n\e[1;30m\][$$:$PPID \j:\!\[\e[1;30m\]]\[\e[0;36m\] \T \d \[\e[1;30m\][\[\e[1;34m\]\u@\H\[\e[1;30m\]:\[\e[0;37m\]${SSH_TTY} \[\e[0;32m\]+${SHLVL}\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \[\e[1;2;3;37m\]\w\[\e[0;37m\]  \n($SHLVL:\!)\$ '
