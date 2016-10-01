@@ -1,0 +1,85 @@
+function dolly-s3_size(){
+	aws s3api list-objects --bucket dolly-s3-videos --output json --query "[sum(Contents[].Size), length(Contents[])]" | awk 'NR!=2 {print $0;next} NR==2 {print $0/1024/1024/1024" GB"}'
+}
+
+function upload(){
+	# This script should upload the given file into the storage-s3-bucket/Uploads folder and give the downloadable link
+	# Should only work for files, don't entertain yourself for folders :P :P :V :V
+	aws s3 cp "$@" s3://storage-s3-bucket/Uploads/ --profile Storage
+}
+
+function prettyjson(){
+	read foo
+	echo $foo | underscore pretty --color
+}
+
+function emo() {
+	nodejs /home/ironman/bin/scripts/emoj.js "$@"
+}
+
+function socks(){
+	echo -n "Enter port no.: " 
+	read port
+	export http_proxy=socks5://127.0.0.1:$port
+	export https_proxy=socks5://127.0.0.1:$port
+	export HTTP_PROXY=socks5://127.0.0.1:$port
+	export HTTPS_PROXY=socks5://127.0.0.1:$port
+}
+
+function unset_all() {
+	unset http_proxy
+	unset https_proxy
+	unset HTTP_PROXY
+	unset HTTPS_PROXY
+}
+
+function set_all() {
+	export http_proxy=http://proxy.iiit.ac.in:8080
+	export https_proxy=http://proxy.iiit.ac.in:8080
+	export HTTP_PROXY=http://proxy.iiit.ac.in:8080
+	export HTTPS_PROXY=http://proxy.iiit.ac.in:8080
+}
+
+alias tellmyip='curl icanhazip.com'
+function goto() {
+    cd $1
+}
+
+
+# Customizations for competitive coding environment
+function yo() {
+    # watch for the latest changed file, if cpp file, then run against given test case file (default: in)
+    
+    file_name=$1
+    input_file=$2
+    output_file=$3
+    echo -en "\033]0;Yo: $file_name\a"
+    subl "$file_name"
+    if [[ "$input_file" == "" ]]; then
+        input_file='in'
+    fi
+    
+    if [[ "$output_file" == "" ]]; then
+        output_file='out'
+    fi
+
+    prev=`stat $file_name | tail -2 | head -1`
+    while sleep 0.5
+    do
+        curr=`stat $file_name | tail -2 | head -1`
+        if [[ "$curr" != "$prev" ]]; then
+            printf '\033c'
+            g++ "$file_name" && ./a.out < "$input_file" > output_file && echo "Output generated"
+            prev=$curr
+        fi
+    done
+}
+
+function simple() {
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PROMPT_COMMAND=''
+}
+
+alias out='cat `ls -t out* | head -1`'
+
+alias contests='goto ~/Go/CS/contests'
