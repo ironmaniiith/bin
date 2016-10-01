@@ -80,6 +80,17 @@ function simple() {
     PROMPT_COMMAND=''
 }
 
+function run() {
+    format=$1
+    if [[ "$format" == "" ]]; then
+        format='cpp'
+    fi
+    file=`ls -t *$format | head -1`
+    if [[ "$file" != "" ]]; then
+        g++ "$file" && ./a.out
+    fi
+}
+
 alias out='cat `ls -t out* | head -1`'
 
 alias contests='goto ~/Go/CS/contests'
